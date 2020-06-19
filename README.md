@@ -1,6 +1,6 @@
-Marvel Comics Catalog.
+# Marvel Comics Catalog.
 
-List, Filter by Character and view the Detaisl of each Marvel Comic ever released.
+List, Filter by Character and view the Details of each Marvel Comic ever released.
 
 The app demo is running on Heroku: [dx-marvel-comics](https://dx-marvel-comics.herokuapp.com/).
 
