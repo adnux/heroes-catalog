@@ -48,7 +48,6 @@ const Details = ({ id }) => {
 Details.propTypes = {};
 
 const Comic = ({ comic }) => {
-  console.log('comic', comic)
   const {
     title,
     thumbnail: { path, extension },

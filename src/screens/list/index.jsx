@@ -3,56 +3,47 @@ import React, { useCallback, useEffect, useState } from "react";
 import { queryCache, usePaginatedQuery } from "react-query";
 import { fetchCharacters, fetchComicsPage } from "../../api";
 import ListItem from "./listItem";
+import useHeader from "../header/use";
 
 const ComicsList = (props) => {
-  const { page, setPage } = props;
-  const [name, setName] = useState("");
-  const [characters, setCharacters] = useState();
-
-  const fetchComics = useCallback(
-    async (key, page) => await fetchComicsPage(page, characters),
-    [page]
-  );
-
   const {
-    status,
-    resolvedData,
-    latestData,
-    error,
-    isFetching,
-  } = usePaginatedQuery(["heroes", page], fetchComics, {});
+    state: { loading, comics, page, characters, selected },
+    actions: { setLoading, fetchComics, setPage, setCharacters, handleCharFieldChange },
+  } = useHeader();
 
   useEffect(() => {
-    if (latestData?.hasMore) {
-      queryCache.prefetchQuery(["projects", page + 1, characters], fetchComics);
-    }
-  }, [latestData, fetchCharacters, page]);
-  console.log("status", status);
-  // console.log("resolvedData", resolvedData);
-  // console.log("latestData", latestData);
+    fetchComics(page, selected);
+  }, [page, selected, fetchComics]);
+
+  // const {
+  //   status,
+  //   resolvedData,
+  //   latestData,
+  //   error,
+  //   isFetching,
+  // } = usePaginatedQuery(["heroes", page], fetchComics, {});
+
   return (
     <div>
-      {status === "loading" ? (
+      {loading ? (
         <div>Loading...</div>
-      ) : status === "error" ? (
-        <div>Error: {error.message}</div>
       ) : (
         <div className="site-card-wrapper">
           <Row gutter={8}>
-            {resolvedData.results.map((comic) => (
+            {comics?.results?.map((comic) => (
               <ListItem key={comic.id} comic={comic} />
             ))}
           </Row>
         </div>
       )}
       {/*  */}
-      {resolvedData && (
+      {comics && (
         <Pagination
           defaultCurrent={1}
           current={page}
           showSizeChanger={false}
           showQuickJumper
-          total={resolvedData.total}
+          total={comics.total}
           onChange={(page) => {
             setPage(page);
             window.scrollTo(0, 0);

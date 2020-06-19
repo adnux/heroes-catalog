@@ -36,7 +36,7 @@ const ListItem = ({ comic }) => {
   authors = cutString(authors);
   let desc = cutString(description);
   return (
-    <Col sm={8} md={4}>
+    <Col sm={12} md={8} xl={4}>
       <Card
         title={title}
         alt={title}

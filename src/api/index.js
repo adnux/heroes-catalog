@@ -19,7 +19,7 @@ export function getQueryParams(offset, query) {
     hash: md5(ts + API_PRIVATE + API_PUBLIC),
     limit: 10,
     offset,
-    ...{ ...({query} ?? null) },
+    ...{ ...(query ?? null) },
   };
   return Object.keys(params)
     .filter((key) => params[key] !== undefined)
@@ -29,8 +29,14 @@ export function getQueryParams(offset, query) {
     .join("&");
 }
 
-export async function fetchComicsPage(page, characters) {
-  const response = await api.get(`comics?${getQueryParams(page * PAGE_SIZE, characters)}`);
+export async function fetchComicsPage(page, id) {
+  let characters = undefined;
+  if (id) {
+    characters = { characters: id };
+  }
+  const response = await api.get(
+    `comics?${getQueryParams(page * PAGE_SIZE, characters)}`
+  );
   const error = !response.status === 200;
   if (error) {
     throw new Error(response.statusText);
@@ -38,7 +44,7 @@ export async function fetchComicsPage(page, characters) {
   const data = response.data.data;
   return {
     ...data,
-    hasMore: data.total / PAGE_SIZE >= page * PAGE_SIZE,
+    hasMore: data.total / PAGE_SIZE > page * PAGE_SIZE,
   };
 }
 
@@ -48,12 +54,14 @@ export async function fetchComicDetais(id) {
   if (error) {
     throw new Error(response.statusText);
   }
-  const[first] = response.data.data.results;
+  const [first] = response.data.data.results;
   return first;
 }
 
 export async function fetchCharacters(offset, nameStartsWith) {
-  const response = await api.get(`characters?${getQueryParams(offset, nameStartsWith)}`);
+  const response = await api.get(
+    `characters?${getQueryParams(offset, { nameStartsWith })}`
+  );
   const error = !response.status === 200;
   if (error) {
     throw new Error(response.statusText);
