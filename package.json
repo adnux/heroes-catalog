@@ -10,9 +10,11 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.3.4",
     "axios": "^0.19.2",
+    "blueimp-md5": "^2.16.0",
     "dayjs": "^1.8.28",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-query": "^1.5.8",
     "react-scripts": "3.4.1"
   },
   "scripts": {

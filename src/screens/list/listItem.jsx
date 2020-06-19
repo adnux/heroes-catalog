@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { useQuery } from "react-query";
-import { fetchComicDetais } from "../../api";
+import { Link } from "@reach/router";
 
 /**
  * Comic {
@@ -21,58 +20,36 @@ import { fetchComicDetais } from "../../api";
  * }
  */
 
-const Details = ({ id }) => {
-  const fetchComic = useCallback(
-    async (key, id) => await fetchComicDetais(id),
-    [id]
-  );
-
-  const { status, data, error, isFetching } = useQuery(
-    id && ["comic", id],
-    fetchComic
-  );
-  return (
-    <div>
-      {!id || status === "loading" ? (
-        <span>"Loading ..."</span>
-      ) : status === "error" ? (
-        <span>Error: {error.message}</span>
-      ) : (
-        <Comic comic={data} />
-      )}
-    </div>
-  );
-};
-
-Details.propTypes = {};
-
-const Comic = ({ comic }) => {
+const ListItem = ({ comic }) => {
   const {
+    id,
     title,
     thumbnail: { path, extension },
     images,
-    description,
     creators,
-    characters,
   } = comic;
+  // Título, imagem, thumbnail e autores
+  let authors = creators.items.map((creator) => creator.name).join(", ");
+  const maxLenth = 60;
+  if (authors.length > maxLenth) {
+    authors = `${authors.substring(0, maxLenth)}...`;
+  }
   return (
-    <>
-      <div>{title}</div>
-      <div>
-        <img src={`${path}.${extension}`} style={{ width: "200px" }} />
-      </div>
-      <div>{description}</div>
+    <li>
+      <span>
+        <img src={`${path}.${extension}`} style={{ width: "50px" }} />
+        <Link to={`hero/${id}`}>Title: {title}</Link>
+      </span>
       <div>
         {images.map((image) => (
           <img src={`${path}.${extension}`} style={{ width: "50px" }} />
         ))}
       </div>
-      {/* <div>{creators}</div> */}
-      {/* <div>{characters}</div> */}
-    </>
+      <div>{authors}</div>
+    </li>
   );
 };
 
-Comic.propTypes = {};
+ListItem.propTypes = {};
 
-export default Details;
+export default ListItem;
