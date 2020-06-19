@@ -41,6 +41,7 @@ const ListItem = ({ comic }) => {
       <Card
         title={title}
         alt={title}
+        type="inner"
         cover={<img alt={title} src={`${path}.${extension}`} />}
         extra={<Link to={`hero/${id}`}>More</Link>}
       >

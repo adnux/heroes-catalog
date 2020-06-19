@@ -47,10 +47,12 @@ const Comic = ({ comic }) => {
               align="center"
               style={{ margin: "10px" }}
             >
-              <img
-                src={`${image.path}.${image.extension}`}
-                style={{ width: "200px" }}
-              />
+              <a href={`${image.path}.${image.extension}`} target="_blank">
+                <img
+                  src={`${image.path}.${image.extension}`}
+                  style={{ width: "200px" }}
+                />
+              </a>
             </Space>
           ))}
       </Card>
