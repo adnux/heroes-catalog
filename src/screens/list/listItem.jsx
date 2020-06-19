@@ -1,6 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { Link } from "@reach/router";
+import { Avatar, List, Skeleton, Col, Card, Descriptions } from "antd";
+import React from "react";
+import { cutString } from "../../utils/strings";
 
 /**
  * Comic {
@@ -27,26 +28,44 @@ const ListItem = ({ comic }) => {
     thumbnail: { path, extension },
     images,
     creators,
+    description,
+    format,
   } = comic;
   // Título, imagem, thumbnail e autores
   let authors = creators.items.map((creator) => creator.name).join(", ");
-  const maxLenth = 60;
-  if (authors.length > maxLenth) {
-    authors = `${authors.substring(0, maxLenth)}...`;
-  }
+  authors = cutString(authors);
+  let desc = cutString(description);
   return (
-    <li>
-      <span>
-        <img src={`${path}.${extension}`} style={{ width: "50px" }} />
-        <Link to={`hero/${id}`}>Title: {title}</Link>
-      </span>
-      <div>
-        {images.map((image) => (
-          <img src={`${path}.${extension}`} style={{ width: "50px" }} />
-        ))}
-      </div>
-      <div>{authors}</div>
-    </li>
+    <Col sm={8} md={4}>
+      <Card
+        title={title}
+        alt={title}
+        cover={
+          <img
+            alt={title}
+            src={`${path}.${extension}`}
+          />
+        }
+        extra={<Link to={`hero/${id}`}>More</Link>}
+      >
+        <Link to={`hero/${id}`}>
+          <Descriptions layout="vertical">
+            {description && (
+              <Descriptions.Item label="Description">{desc}</Descriptions.Item>
+            )}
+            {authors && (
+              <Descriptions.Item label="Authors">{authors}</Descriptions.Item>
+            )}
+            {format && (
+              <Descriptions.Item label="Format">{format}</Descriptions.Item>
+            )}
+            {images && (
+              <Descriptions.Item label="Images">{images.length}</Descriptions.Item>
+            )}
+          </Descriptions>
+        </Link>
+      </Card>
+    </Col>
   );
 };
 

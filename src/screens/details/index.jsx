@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from "react";
-import PropTypes from "prop-types";
+import { Card, Descriptions } from "antd";
+import React, { useCallback } from "react";
 import { useQuery } from "react-query";
 import { fetchComicDetais } from "../../api";
+import { cutString } from "../../utils/strings";
 
 /**
  * Comic {
@@ -47,6 +48,7 @@ const Details = ({ id }) => {
 Details.propTypes = {};
 
 const Comic = ({ comic }) => {
+  console.log('comic', comic)
   const {
     title,
     thumbnail: { path, extension },
@@ -54,21 +56,50 @@ const Comic = ({ comic }) => {
     description,
     creators,
     characters,
+    format,
   } = comic;
+  const authors = cutString(
+    creators.items.map((creator) => creator.name).join(", ")
+  );
+  const desc = cutString(description);
+  // const
   return (
     <>
-      <div>{title}</div>
-      <div>
-        <img src={`${path}.${extension}`} style={{ width: "200px" }} />
-      </div>
-      <div>{description}</div>
-      <div>
-        {images.map((image) => (
-          <img src={`${path}.${extension}`} style={{ width: "50px" }} />
-        ))}
-      </div>
-      {/* <div>{creators}</div> */}
-      {/* <div>{characters}</div> */}
+      <Card
+        title={title}
+        cover={<img alt={title} src={`${path}.${extension}`} />}
+        style={{ maxWidth: "800px" }}
+      >
+        <Descriptions layout="vertical">
+          {description && (
+            <Descriptions.Item label="Description">{desc}</Descriptions.Item>
+          )}
+          {authors && (
+            <Descriptions.Item label="Authors">{authors}</Descriptions.Item>
+          )}
+          {format && (
+            <Descriptions.Item label="Format">{format}</Descriptions.Item>
+          )}
+          {images && (
+            <Descriptions.Item label="Images">
+              {images.map((image) => (
+                <div key={image.path}>
+                  <img src={`${image.path}.${image.extension}`} style={{ width: "50px" }} />
+                </div>
+              ))}
+            </Descriptions.Item>
+          )}
+          {characters && characters.available > 0 && (
+            <Descriptions.Item label="characters">
+              {characters.items.map((char) => (
+                <div>
+                  {char.name}
+                </div>
+              ))}
+            </Descriptions.Item>
+          )}
+        </Descriptions>
+      </Card>
     </>
   );
 };
