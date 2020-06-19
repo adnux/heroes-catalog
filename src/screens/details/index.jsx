@@ -1,9 +1,8 @@
-import { Card, Descriptions } from "antd";
+import { Space, Col } from "antd";
 import React, { useCallback } from "react";
 import { useQuery } from "react-query";
 import { fetchComicDetais } from "../../api";
-import { cutString } from "../../utils/strings";
-
+import Comic from "./comic";
 /**
  * Comic {
  *   id (int, optional): The unique ID of the comic resource.,
@@ -33,7 +32,7 @@ const Details = ({ id }) => {
     fetchComic
   );
   return (
-    <div>
+    <Col align="center">
       {!id || status === "loading" ? (
         <span>"Loading ..."</span>
       ) : status === "error" ? (
@@ -41,68 +40,10 @@ const Details = ({ id }) => {
       ) : (
         <Comic comic={data} />
       )}
-    </div>
+    </Col>
   );
 };
 
 Details.propTypes = {};
-
-const Comic = ({ comic }) => {
-  const {
-    title,
-    thumbnail: { path, extension },
-    images,
-    description,
-    creators,
-    characters,
-    format,
-  } = comic;
-  const authors = cutString(
-    creators.items.map((creator) => creator.name).join(", ")
-  );
-  const desc = cutString(description);
-  // const
-  return (
-    <>
-      <Card
-        title={title}
-        cover={<img alt={title} src={`${path}.${extension}`} />}
-        style={{ maxWidth: "800px" }}
-      >
-        <Descriptions layout="vertical">
-          {description && (
-            <Descriptions.Item label="Description">{desc}</Descriptions.Item>
-          )}
-          {authors && (
-            <Descriptions.Item label="Authors">{authors}</Descriptions.Item>
-          )}
-          {format && (
-            <Descriptions.Item label="Format">{format}</Descriptions.Item>
-          )}
-          {images && (
-            <Descriptions.Item label="Images">
-              {images.map((image) => (
-                <div key={image.path}>
-                  <img src={`${image.path}.${image.extension}`} style={{ width: "50px" }} />
-                </div>
-              ))}
-            </Descriptions.Item>
-          )}
-          {characters && characters.available > 0 && (
-            <Descriptions.Item label="characters">
-              {characters.items.map((char) => (
-                <div>
-                  {char.name}
-                </div>
-              ))}
-            </Descriptions.Item>
-          )}
-        </Descriptions>
-      </Card>
-    </>
-  );
-};
-
-Comic.propTypes = {};
 
 export default Details;

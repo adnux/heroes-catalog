@@ -30,6 +30,7 @@ const ListItem = ({ comic }) => {
     creators,
     description,
     format,
+    modified,
   } = comic;
   // Título, imagem, thumbnail e autores
   let authors = creators.items.map((creator) => creator.name).join(", ");
@@ -40,28 +41,32 @@ const ListItem = ({ comic }) => {
       <Card
         title={title}
         alt={title}
-        cover={
-          <img
-            alt={title}
-            src={`${path}.${extension}`}
-          />
-        }
+        cover={<img alt={title} src={`${path}.${extension}`} />}
         extra={<Link to={`hero/${id}`}>More</Link>}
       >
         <Link to={`hero/${id}`}>
-          <Descriptions layout="vertical">
+          <Descriptions bordered layout="vertical">
             {description && (
-              <Descriptions.Item label="Description">{desc}</Descriptions.Item>
+              <Descriptions.Item span={3} label="Description">
+                {desc}
+              </Descriptions.Item>
             )}
             {authors && (
-              <Descriptions.Item label="Authors">{authors}</Descriptions.Item>
+              <Descriptions.Item span={3} label="Authors">
+                {authors}
+              </Descriptions.Item>
             )}
             {format && (
               <Descriptions.Item label="Format">{format}</Descriptions.Item>
             )}
             {images && (
-              <Descriptions.Item label="Images">{images.length}</Descriptions.Item>
+              <Descriptions.Item label="Images">
+                {images.length}
+              </Descriptions.Item>
             )}
+            {/* {modified && (
+              <Descriptions.Item label="Modified">{modified}</Descriptions.Item>
+            )} */}
           </Descriptions>
         </Link>
       </Card>

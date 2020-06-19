@@ -60,7 +60,7 @@ export async function fetchComicDetais(id) {
 
 export async function fetchCharacters(offset, nameStartsWith) {
   const response = await api.get(
-    `characters?${getQueryParams(offset, { nameStartsWith })}`
+    `characters?${getQueryParams(offset, { nameStartsWith, limit: 30 })}`
   );
   const error = !response.status === 200;
   if (error) {
