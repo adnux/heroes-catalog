@@ -11,6 +11,7 @@ const HeaderProvider = ({ children }) => {
   const [selected, setSelected] = useState();
 
   const handleSelectChar = (id) => {
+    setPage(1);
     setSelected(id);
   };
 
